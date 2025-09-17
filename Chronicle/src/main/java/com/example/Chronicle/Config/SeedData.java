@@ -1,15 +1,21 @@
 package com.example.Chronicle.Config;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.example.Chronicle.Models.Account;
+import com.example.Chronicle.Models.Authority;
 import com.example.Chronicle.Models.Post;
 import com.example.Chronicle.Service.AccountService;
+import com.example.Chronicle.Service.AuthorityService;
 import com.example.Chronicle.Service.PostService;
+import com.example.Chronicle.util.constants.Authorities;
+import com.example.Chronicle.util.constants.Roles;
 
 //Seed initial data into the database
 //Will only run if the database is empty
@@ -22,10 +28,17 @@ public class SeedData implements CommandLineRunner {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private AuthorityService authorityService;
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Seeding data...");
+      for(Authorities auth: Authorities.values()){
+        Authority authority = new Authority();
+        authority.setId(auth.getAuthorityId());
+        authority.setName(auth.getAuthorityString());
+        authorityService.save(authority);
+      }
 
         Account account01 = new Account();
         Account account02 = new Account();
@@ -33,9 +46,17 @@ public class SeedData implements CommandLineRunner {
         account01.setEmail("user1@example.com");
         account01.setPassword("password1");
         account01.setUsername("user1");
+        account01.setRole(Roles.ADMIN.getRole());
         account02.setEmail("user2@example.com");
         account02.setPassword("password2");
         account02.setUsername("user2");
+        account02.setRole(Roles.EDITOR.getRole());
+        Set<Authority> authorities = new HashSet<>();
+        authorityService.findById(Authorities.RESET_ANY_USER_PASSWORD.getAuthorityId()).ifPresent(authorities::add);
+        authorityService.findById(Authorities.ACCESS_ADMIN_DASHBOARD.getAuthorityId()).ifPresent(authorities::add);
+
+        account01.setAuthorities(authorities);
+        account02.setAuthorities(authorities);
 
         accountService.saveAccount(account01);
         accountService.saveAccount(account02);

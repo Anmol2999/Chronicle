@@ -1,4 +1,4 @@
-package com.example.Chronicle.Config;
+package com.example.Chronicle.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

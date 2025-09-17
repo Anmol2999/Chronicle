@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Chronicle.Models.Account;
 import com.example.Chronicle.repository.AccountRepository;
+import com.example.Chronicle.util.constants.Roles;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -27,6 +28,7 @@ public class AccountService implements UserDetailsService {
 
     public Account saveAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setRole(Roles.USER.getRole());
         return accountRepository.save(account);
     }
 
@@ -39,7 +41,7 @@ public class AccountService implements UserDetailsService {
             Account user = account.get();
 
             List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("Allowed"));
+            authorities.add(new SimpleGrantedAuthority(user.getRole()));
             return new User(user.getEmail(), user.getPassword(), authorities);
         }
     }
