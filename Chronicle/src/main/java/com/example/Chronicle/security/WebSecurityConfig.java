@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true) // <-- This is the main fix
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
 
         private static final String[] WHITELIST = {
@@ -26,16 +26,20 @@ public class WebSecurityConfig {
         };
 
         @Bean
-        public PasswordEncoder passwordEncoder() { // Removed 'static'
+        public PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
                 http
-                                // 1. Authorize Requests
                                 .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/test").permitAll()
                                                 .requestMatchers(WHITELIST).permitAll()
+                                                .requestMatchers("/profile/**").authenticated()
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/editor/**").hasAnyRole("EDITOR", "ADMIN")
                                                 .anyRequest().authenticated())
                                 // 2. Form Login Configuration
                                 .formLogin(form -> form
@@ -49,7 +53,7 @@ public class WebSecurityConfig {
                                 // 3. Logout Configuration
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/logout?success"))
+                                                .logoutSuccessUrl("/"))
                                 // 4. CSRF and Headers for H2 Console
                                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));

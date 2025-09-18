@@ -9,6 +9,7 @@ import com.example.Chronicle.Models.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+    //
     Optional<Account> findOneByEmailIgnoreCase(String email);
 
 }

@@ -1,41 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head.html"></head>
 
-
-
-<head th:replace="/fragments/head.html"></head>
-
-    
-
-<body class="sub_page">
-
-  <div class="hero_area">
-    <div class="bg-box">
-      <img src="images/nav-bg.jpg" alt="">
+  <body class="sub_page">
+    <div class="hero_area">
+      <div class="bg-box">
+        <img src="images/nav-bg.jpg" alt="" />
+      </div>
+      <header th:replace="/fragments/header.html"></header>
     </div>
-    <header th:replace="/fragments/header.html"></header>
-  </div>
 
-  <!-- about section -->
+    <!-- about section -->
 
-  <section class="about_section layout_padding">
-   <div class="container  ">
+    <section class="about_section layout_padding">
+      <div class="container">
         <div class="posts" th:each="post : ${posts}">
+          <h3>
+            <a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}"
+              >Title</a
+            >
+          </h3>
 
-            <h3 th:text="${post.title}">Title</h3>
-            <p th:text="${post.content}">Content</p>
-            <hr/>
+          <h5
+            th:text="'Author: ' + ${post.author != null ? post.author.username : 'Anonymous'}"
+          ></h5>
+          <h5 th:text="'CreatedAt: ' + ${post.createdAt}"></h5>
+          <p th:text="${post.content}">Content</p>
+          <hr />
         </div>
-
-    </div>
-  </section>
-  <footer th:replace="/fragments/footer.html"></footer>
-  <!-- end about section -->
-
- 
-
- 
-
-</body>
-
+      </div>
+    </section>
+    <footer th:replace="/fragments/footer.html"></footer>
+    <!-- end about section -->
+  </body>
 </html>

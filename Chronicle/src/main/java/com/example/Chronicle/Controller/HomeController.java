@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Chronicle.Models.Post;
 import com.example.Chronicle.Service.PostService;
@@ -29,5 +29,13 @@ public class HomeController {
         // This is not the text that gets displayed. Instead, it's the logical name of the view (the template) that Spring should render
     }
 
-    
+    @GetMapping("/test")
+    @ResponseBody
+    public String testPage() {
+        return "<h1>Success!</h1><p>The security filter is working correctly.</p>";
+    }
 }
+  
+
+    
+

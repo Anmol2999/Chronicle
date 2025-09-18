@@ -17,10 +17,12 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    //This method handles GET requests to the /register URL. When a user clicks a link to the registration page, this code runs.
     @GetMapping("/register")
     public String register(Model model) {
         Account account = new Account();
         model.addAttribute("account", account);
+        //This tells Spring to render the register.html view template and show it to the user.
         return "register";
     }
 
@@ -37,4 +39,10 @@ public class AccountController {
         return "login";
     }
 
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
+   
 }

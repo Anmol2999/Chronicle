@@ -36,10 +36,13 @@ public class Account {
 
     private String role;
 
+
+    //tells JPA that the relationship is already managed by the author field in the Post entity
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
     @ManyToMany
+    //Because it's a many-to-many relationship, a third table is needed to link them. This annotation configures that "join table".
     @JoinTable(
         name ="account_authority",
         joinColumns = {@JoinColumn(name = "account_id",referencedColumnName = "id" )},
