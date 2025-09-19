@@ -22,7 +22,7 @@ import com.example.Chronicle.util.constants.Roles;
 @Component
 public class SeedData implements CommandLineRunner {
     // command line runner runs when the application starts
-
+   
     @Autowired
     private PostService postService;
 

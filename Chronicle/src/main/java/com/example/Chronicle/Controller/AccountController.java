@@ -23,7 +23,7 @@ public class AccountController {
         Account account = new Account();
         model.addAttribute("account", account);
         //This tells Spring to render the register.html view template and show it to the user.
-        return "register";
+        return "account_views/register";
     }
 
     @PostMapping("/register")
@@ -36,12 +36,12 @@ public class AccountController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "account_views/login";
     }
 
     @GetMapping("/profile")
     public String profile() {
-        return "profile";
+        return "account_views/profile";
     }
 
    

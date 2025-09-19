@@ -10,53 +10,58 @@
       <header th:replace="/fragments/header.html"></header>
     </div>
 
-    <!-- about section -->
+   
 
-    <!-- book section -->
-    <section class="book_section layout_padding">
+    
+    <section class="food_section layout_padding">
       <div class="container">
         <div class="heading_container">
-          <h4>login</h4>
+         
         </div>
         <div class="row">
           <div class="col-md-6">
             <div class="form_container">
-              <form action="#" th:action="@{/login}" method="post">
-                <div>
+                <h3>Add Post</h3>
+              <form action="#" th:action="@{/post/add}"
+              th:object="${post}" method="post">
+                <div class="form-group">
+                    <input type="hidden"
+                    id="author"
+                    name="author"
+                    th:field="*{author}"
+                  />
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
+                    id="title"
+                    th:field="*{title}"
+                    name="title"
+                    type="text"
                     class="form-control"
-                    placeholder="Email"
+                    placeholder="Title"
                   />
                 </div>
                 <div>
                   <input
-                    id="password"
-                    name="password"
-                    type="password"
+                    id="editor"
+                    name="body"
+                    th:field="*{content}"
+                    type="textarea"
                     class="form-control"
-                    placeholder="Password"
+                    placeholder="body"
                   />
                 </div>
 
                 <div class="btn_box">
-                  <button type="submit">login</button>
+                  <button class="btn btn-primary" type="submit">Add Post</button>
                 </div>
               </form>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="map_container">
-              <div id="googleMap"></div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>
-    <!-- end book section -->
+    
     <footer th:replace="/fragments/footer.html"></footer>
-    <!-- end about section -->
+   
   </body>
 </html>

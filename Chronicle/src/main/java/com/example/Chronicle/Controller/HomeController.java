@@ -25,16 +25,11 @@ public class HomeController {
     public String home(Model model) {
         List<Post> posts = postService.getAll();   
          model.addAttribute("posts", posts);
-        return "home";
+        return "home_views/home";
         // This is not the text that gets displayed. Instead, it's the logical name of the view (the template) that Spring should render
-    }
+    }}
 
-    @GetMapping("/test")
-    @ResponseBody
-    public String testPage() {
-        return "<h1>Success!</h1><p>The security filter is working correctly.</p>";
-    }
-}
+  
   
 
     

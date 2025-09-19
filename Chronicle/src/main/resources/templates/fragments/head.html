@@ -13,12 +13,12 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <link rel="shortcut icon" th:href="@{/images/favicon.jpg}" type="" />
+    <link rel="shortcut icon" th:href="@{/resources/images/favicon.jpg}" type="" />
 
     <title>Chronicle</title>
 
     <!-- bootstrap core css -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
 
     <!--owl slider stylesheet -->
     <link
@@ -34,11 +34,11 @@
       crossorigin="anonymous"
     />
     <!-- font awesome style -->
-    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <!-- responsive style -->
-    <link href="css/responsive.css" rel="stylesheet" />
+    <link th:href="@{/css/responsive.css}" rel="stylesheet" />
   </head>
 </html>
