@@ -24,8 +24,8 @@
           <h5
             th:text="'Author: ' + ${post.author != null ? post.author.username : 'Anonymous'}"
           ></h5>
-          <h5 th:text="'CreatedAt: ' + ${post.createdAt}"></h5>
-          <p th:text="${post.content}">Content</p>
+          <h5 th:text="'CreatedAt: ' + ${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')} + ' | UpdatedAt: ' + ${#temporals.format(post.updatedAt, 'dd/MM/yyyy HH:mm')}"></h5>
+          <p th:utext="${post.content}">Content</p>
           <hr />
         </div>
       </div>

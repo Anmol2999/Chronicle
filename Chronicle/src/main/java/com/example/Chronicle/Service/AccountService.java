@@ -32,6 +32,11 @@ public class AccountService implements UserDetailsService {
         if (account.getRole() == null) {
             account.setRole(Roles.USER.getRole());
         }
+         if (account.getPhoto() == null) {
+            String path = "resources/static/images/profile_pics/person.png";
+            account.setPhoto(path);
+        }
+
         return accountRepository.save(account);
     }
 

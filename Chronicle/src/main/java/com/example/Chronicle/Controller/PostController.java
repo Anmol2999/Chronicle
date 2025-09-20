@@ -6,8 +6,10 @@ import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.Chronicle.Models.Account;
@@ -16,6 +18,11 @@ import com.example.Chronicle.Service.AccountService;
 import com.example.Chronicle.Service.PostService;
 
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+
+
+
+
 
 
 
@@ -82,4 +89,61 @@ public class PostController {
         }
     }
 
+    @PostMapping("/posts/add")
+    @PreAuthorize("isAuthenticated()")
+    public String addPostHandler(@ModelAttribute Post post,Principal principal){
+        String authUser="email";
+        if (principal!=null) {
+            authUser=principal.getName();
+        }
+        if (post.getAuthor().getEmail().equals(authUser)){
+
+            postService.save(post);
+        return "redirect:/posts/"+post.getId();
+            
+        }
+       return "redirect:/";
+    }
+
+    @GetMapping("/posts/{id}/edit")
+    @PreAuthorize("isAuthenticated()")
+    public String geteditPost(@PathVariable Long id,Model model){
+       Optional<Post> optionalPost=postService.getById(id);
+       if (optionalPost.isPresent()) {
+         Post post=optionalPost.get();
+         model.addAttribute("post", post);
+         return "post_views/edit_post";
+       }else{
+        return "error/404";
+       }
+       
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    @PreAuthorize("isAuthenticated()")
+    public String UpdatePost(@PathVariable Long id,@ModelAttribute Post post){
+       Optional<Post> optionalPost=postService.getById(id);
+       if (optionalPost.isPresent()) {
+         Post existingPost=optionalPost.get();
+
+        existingPost.setTitle(post.getTitle());
+        existingPost.setContent(post.getContent());
+        postService.save(existingPost);
+        return "redirect:/posts/"+existingPost.getId();
+       }
+
+       return "error/404";
+    }
+
+    @GetMapping("/posts/{id}/delete")
+    @PreAuthorize("isAuthenticated()")
+    public String deletePost(@PathVariable Long id){
+       Optional<Post> optionalPost=postService.getById(id);
+        if (optionalPost.isPresent()) {
+            Post post=optionalPost.get();
+            postService.delete(post);
+            return "redirect:/";
+        }
+       return "error/404";
+    }
 }

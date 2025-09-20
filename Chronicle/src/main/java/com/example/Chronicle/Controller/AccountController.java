@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.example.Chronicle.Models.Account;
 import com.example.Chronicle.Service.AccountService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -26,12 +29,17 @@ public class AccountController {
         return "account_views/register";
     }
 
+    //BindingResult is used to hold the result of a validation and binding and contains errors that may have occurred.
+    //The @Valid annotation is used to indicate that the Account object should be validated before the method is invoked.
     @PostMapping("/register")
-    public String register_user(@ModelAttribute Account account) {
+    public String register_user(@Valid @ModelAttribute Account account, BindingResult bindingResult) {
 
-        accountService.saveAccount(account);
-        return "redirect:/";
-
+        if (bindingResult.hasErrors()) {
+            return "account_views/register";
+        } else {
+            accountService.saveAccount(account);
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/login")

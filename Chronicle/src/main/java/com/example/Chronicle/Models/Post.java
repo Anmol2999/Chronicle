@@ -34,6 +34,8 @@ public class Post {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "author_id",referencedColumnName = "id",nullable = true)
     private Account author;
