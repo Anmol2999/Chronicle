@@ -17,7 +17,10 @@ import com.example.Chronicle.Models.Post;
 import com.example.Chronicle.Service.AccountService;
 import com.example.Chronicle.Service.PostService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -91,8 +94,11 @@ public class PostController {
 
     @PostMapping("/posts/add")
     @PreAuthorize("isAuthenticated()")
-    public String addPostHandler(@ModelAttribute Post post,Principal principal){
+    public String addPostHandler(@Valid @ModelAttribute Post post,BindingResult bindingResult,Principal principal){
         String authUser="email";
+        if (bindingResult.hasErrors()) {
+            return "post_views/add_post";
+        }
         if (principal!=null) {
             authUser=principal.getName();
         }
@@ -108,6 +114,9 @@ public class PostController {
     @GetMapping("/posts/{id}/edit")
     @PreAuthorize("isAuthenticated()")
     public String geteditPost(@PathVariable Long id,Model model){
+
+
+         
        Optional<Post> optionalPost=postService.getById(id);
        if (optionalPost.isPresent()) {
          Post post=optionalPost.get();
@@ -121,7 +130,11 @@ public class PostController {
 
     @PostMapping("/posts/{id}/edit")
     @PreAuthorize("isAuthenticated()")
-    public String UpdatePost(@PathVariable Long id,@ModelAttribute Post post){
+    public String UpdatePost(@PathVariable Long id,@Valid @ModelAttribute Post post, BindingResult bindingResult){
+
+        if (bindingResult.hasErrors()) {
+            return "post_views/edit_post";
+        }
        Optional<Post> optionalPost=postService.getById(id);
        if (optionalPost.isPresent()) {
          Post existingPost=optionalPost.get();

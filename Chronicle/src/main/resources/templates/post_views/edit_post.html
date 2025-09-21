@@ -38,6 +38,10 @@
                     class="form-control"
                     placeholder="Title"
                   />
+                    <p
+                    th:if="${#fields.hasErrors('title')}"
+                    th:errors="*{title}" class="alert alert-danger" role="alert"
+                  >Title required</p>
                 </div>
                 <div class="form-group">
                   <textarea
@@ -46,6 +50,10 @@
                     th:field="*{content}"
 
                   ></textarea>
+                   <p
+                    th:if="${#fields.hasErrors('content')}"
+                    th:errors="*{content}" class="alert alert-danger" role="alert"
+                  >Content required</p>
                 </div >
 
                 <div class="btn_box">
