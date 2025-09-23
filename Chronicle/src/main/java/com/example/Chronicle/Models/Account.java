@@ -1,6 +1,7 @@
 package com.example.Chronicle.Models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,6 +64,9 @@ public class Account {
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
+    private String password_reset_token;
+
+    private LocalDateTime password_reset_token_expiry;
     @ManyToMany
     //Because it's a many-to-many relationship, a third table is needed to link them. This annotation configures that "join table".
     @JoinTable(

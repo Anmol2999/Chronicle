@@ -38,6 +38,19 @@
                     th:errors="*{email}" class="alert alert-danger" role="alert"
                   ></p>
                 </div>
+                  <div>
+                  <input
+                    id="username"
+                    th:field="*{username}"
+                    type="text"
+                    class="form-control"
+                    placeholder="Username"
+                  />
+                  <p
+                    th:if="${#fields.hasErrors('username')}"
+                    th:errors="*{username}" class="alert alert-danger" role="alert"
+                  >Username error</p>
+                </div>
                 <div>
                   <input
                     id="password"
@@ -47,8 +60,8 @@
                     placeholder="Password"
                   />
                   <p
-                    th:if="${#fields.hasErrors('email')}"
-                    th:errors="*{email}" class="alert alert-danger" role="alert"
+                    th:if="${#fields.hasErrors('password')}"
+                    th:errors="*{password}" class="alert alert-danger" role="alert"
                   >Password error</p>
                 </div>
               

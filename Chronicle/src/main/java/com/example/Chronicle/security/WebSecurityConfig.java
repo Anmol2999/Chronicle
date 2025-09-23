@@ -23,7 +23,10 @@ public class WebSecurityConfig {
                         "/js/**",
                         "/images/**",
                         "/fonts/**",
-                        "/posts/**"
+                        "/posts/**",
+                        "images/**", "/uploads/**",
+                        "/forgot-password",
+                        "/reset-password"
         };
 
         @Bean
@@ -34,30 +37,32 @@ public class WebSecurityConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-                http
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/test").permitAll()
-                                                .requestMatchers(WHITELIST).permitAll()
-                                                .requestMatchers("/profile/**").authenticated()
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("/editor/**").hasAnyRole("EDITOR", "ADMIN")
-                                                .anyRequest().authenticated())
-                                // 2. Form Login Configuration
-                                .formLogin(form -> form
-                                                .loginPage("/login")
-                                                .loginProcessingUrl("/login")
-                                                .usernameParameter("email")
-                                                .passwordParameter("password")
-                                                .defaultSuccessUrl("/", true)
-                                                .failureUrl("/login?error")
-                                                .permitAll())
-                                // 3. Logout Configuration
-                                .logout(logout -> logout
-                                                .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/"))
-                                // 4. CSRF and Headers for H2 Console
-                                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-                                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
+            http
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/test").permitAll()
+                            .requestMatchers(WHITELIST).permitAll()
+                            .requestMatchers("/profile/**").authenticated()
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/editor/**").hasAnyRole("EDITOR", "ADMIN")
+                            .anyRequest().authenticated())
+                    // 2. Form Login Configuration
+                    .formLogin(form -> form
+                            .loginPage("/login")
+                            .loginProcessingUrl("/login")
+                            .usernameParameter("email")
+                            .passwordParameter("password")
+                            .defaultSuccessUrl("/", true)
+                            .failureUrl("/login?error")
+                            .permitAll())
+                    // 3. Logout Configuration
+                    .logout(logout -> logout
+                            .logoutUrl("/logout")
+                            .logoutSuccessUrl("/"))
+                    // 4. Remember Me Configuration
+                    .rememberMe(me -> me.rememberMeParameter("remember-me"))
+                    // 5. CSRF and Headers for H2 Console
+                    .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+                    .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
                 return http.build();
         }
