@@ -26,7 +26,12 @@
           ></h5>
           <h5 th:text="'CreatedAt: ' + ${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')} + ' | UpdatedAt: ' + ${#temporals.format(post.updatedAt, 'dd/MM/yyyy HH:mm')}"></h5>
           <p th:utext="${post.content}">Content</p>
-          <hr />
+          <hr style="
+            border: 1px solid #a4a4a4;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        " />
+         
         </div>
       </div>
     </section>

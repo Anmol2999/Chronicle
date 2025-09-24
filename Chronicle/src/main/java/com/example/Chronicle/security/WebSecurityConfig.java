@@ -26,7 +26,8 @@ public class WebSecurityConfig {
                         "/posts/**",
                         "images/**", "/uploads/**",
                         "/forgot-password",
-                        "/reset-password"
+                        "/reset-password",
+                        "/change-password"
         };
 
         @Bean

@@ -11,26 +11,26 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import com.example.Chronicle.Models.Account;
-import com.example.Chronicle.Service.AccountService;
-import com.example.Chronicle.util.AppUtil;
-
-import jakarta.validation.Valid;
-
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.Chronicle.Models.Account;
+import com.example.Chronicle.Service.AccountService;
+import com.example.Chronicle.Service.EmailService;
+import com.example.Chronicle.util.AppUtil;
+import com.example.Chronicle.util.email.emailDetails;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class AccountController {
@@ -38,7 +38,8 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    
+    @Autowired
+    private EmailService emailService;
 
     // This method handles GET requests to the /register URL. When a user clicks a
     // link to the registration page, this code runs.
@@ -174,13 +175,48 @@ public class AccountController {
         if (optionalAccount.isPresent()) {
             Account account = accountService.findOnebyId(optionalAccount.get().getId()).get();
             String reset_token=UUID.randomUUID().toString();
-            account.setPassword_reset_token(reset_token);
-            account.setPassword_reset_token_expiry(LocalDateTime.now().plusMinutes(600));
+            account.setPasswordResetToken(reset_token);
+            account.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(600));
             accountService.saveAccount(account);
+            String resetLink = "This is the reset password link : http://localhost:8080/change-password?token=" + reset_token;
+            emailDetails details=new emailDetails(account.getEmail(), "Password Reset Request", resetLink);
+            if (emailService.sendEmail(details)==false) {
+                redirectAttributes.addFlashAttribute("error", "Error while sending email.");
+        return "redirect:/forgot-password";
+            }
+            
             redirectAttributes.addFlashAttribute("message", "Password reset link has been sent to your email (simulated).");
             return "redirect:/login";
         }
         redirectAttributes.addFlashAttribute("error", "Email not found.");
         return "redirect:/forgot-password";
+    }
+
+    @GetMapping("/change-password")
+    public String changePassword(Model model,@RequestParam("token") String token,RedirectAttributes redirectAttributes) {
+        Optional<Account> optionalAccount = accountService.findByToken(token);
+        if (optionalAccount.isPresent()) {
+           Account account=accountService.findOnebyId(optionalAccount.get().getId()).get();
+           LocalDateTime now=LocalDateTime.now();
+           if (now.isAfter(optionalAccount.get().getPasswordResetTokenExpiry())) {
+               model.addAttribute("error", "Password reset token has expired.");
+               return "redirect:/forgot-password";
+           }
+           model.addAttribute("account", account);
+           return "account_views/change-password";
+        }
+        redirectAttributes.addFlashAttribute("error", "Invalid password reset token.");
+        return "redirect:/forgot-password";
+    }
+    @PostMapping("/change-password")
+    public String post_changePassword(@ModelAttribute Account account, RedirectAttributes redirectAttributes) {
+        Account account_by_id=accountService.findOnebyId(account.getId()).get();
+        account_by_id.setPassword(account.getPassword());
+        account_by_id.setPasswordResetToken(null);
+        accountService.saveAccount(account_by_id);
+
+
+        redirectAttributes.addFlashAttribute("message", "Password changed successfully. Please log in with your new password.");
+        return "redirect:/login";
     }
 }

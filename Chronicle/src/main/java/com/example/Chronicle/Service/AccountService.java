@@ -27,6 +27,8 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    
+
     public Account saveAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         if (account.getRole() == null) {
@@ -65,5 +67,8 @@ public class AccountService implements UserDetailsService {
     }
     public Optional<Account> findOnebyId(Long id) {
         return accountRepository.findById(id);
+    }
+    public Optional<Account> findByToken(String token) {
+        return accountRepository.findOneByPasswordResetToken(token);
     }
 }

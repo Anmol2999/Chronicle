@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -64,9 +65,13 @@ public class Account {
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
-    private String password_reset_token;
 
-    private LocalDateTime password_reset_token_expiry;
+    @Column(name = "password_reset_token")
+    private String passwordResetToken;
+
+   
+    @Column(name = "password_reset_token_expiry")
+    private LocalDateTime passwordResetTokenExpiry;
     @ManyToMany
     //Because it's a many-to-many relationship, a third table is needed to link them. This annotation configures that "join table".
     @JoinTable(
