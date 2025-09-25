@@ -1,7 +1,5 @@
 package com.example.Chronicle.util;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class AppUtil {
     private AppUtil() {}
