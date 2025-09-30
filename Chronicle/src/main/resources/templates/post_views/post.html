@@ -7,7 +7,7 @@
       <div class="bg-box">
         <img th:src="@{/images/nav-bg.jpg}" alt="" />
       </div>
-      <header th:replace="/fragments/header.html"></header>
+      <header th:replace="~{/fragments/header.html}"></header>
     </div>
 
     <section class="about_section layout_padding">
@@ -92,6 +92,6 @@
         </div>
       </div>
     </section>
-    <footer th:replace="/fragments/footer.html"></footer>
+    <footer th:replace="~{/fragments/footer.html}"></footer>
   </body>
 </html>
